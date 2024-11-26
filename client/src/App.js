@@ -1,40 +1,43 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import Header from './comp/Header/Header';
-import Footer from './comp/Footer/Footer';
-import Login from './pages/Login/Login';
-import Controle from './pages/Control/Control';
-import Filtro from './pages/Filter/Filter';
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import DashboardPage from "./pages/DashboardPage";
+import ProductsPage from "./pages/ProductsPage";
+import UsersPage from "./pages/UsersPage";
+import AddUserPage from "./pages/AddUserPage";
+import EditUserPage from "./pages/EditUserPage";
+import AddProductPage from "./pages/AddProductPage";
+import EditProductPage from "./pages/EditProductPage";
+import { getProducts, addProduct, updateProduct, deleteProduct, getUsers, addUser, updateUser, deleteUser } from './services/api'; // Importando as funções para carregar os dados
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado de autenticação
+  const [products, setProducts] = useState([]);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    // Carregar produtos
+    getProducts().then((data) => setProducts(data));
+    // Carregar usuários
+    getUsers().then((data) => setUsers(data));
+  }, []);
 
   return (
     <Router>
-      <AppContent isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
-    </Router>
-  );
-}
-
-function AppContent({ isAuthenticated, setIsAuthenticated }) {
-  const location = useLocation(); // Pega a localização atual da aplicação
-
-  return (
-    <>
-      {/* Exibe o Header apenas se não estiver na página de login */}
-      {location.pathname !== '/' && (
-        <Header isAuthenticated={isAuthenticated} />
-      )}
-
-      {/* Exibe a área de conteúdo com base na rota */}
       <Routes>
-        <Route path="/" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
-        <Route path="/filtro" element={<Filtro />} />
-        <Route path="/controle" element={<Controle />} />
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route
+          path="/products"
+          element={<ProductsPage products={products} />}
+        />
+        <Route path="/users" element={<UsersPage users={users} />} />
+        <Route path="/add-user" element={<AddUserPage />} />
+        <Route path="/edit-user/:id" element={<EditUserPage />} />
+        <Route path="/products" element={<ProductsPage />} />
+        <Route path="/add-product" element={<AddProductPage />} />
+        <Route path="/edit-product/:id" element={<EditProductPage />} />
       </Routes>
-
-      <Footer />
-    </>
+    </Router>
   );
 }
 
