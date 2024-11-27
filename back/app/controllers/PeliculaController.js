@@ -76,17 +76,19 @@ class PeliculaController{
     //metodo para cadastrar novas películas
     //dados sendo passados pelo corpo  
     store(req, res) {
-        const dados = req.body;
-        const sql = "INSERT INTO estoque_peliculas SET ?";
-        conexao.query(sql, dados, (erro, resultado) =>{
-             if(erro){
-                 console.log(erro);
-                 res.status(404)
-             } else{
-                res.status(201).json({ mensagem: "Película cadastrada com sucesso", id: resultado.insertId });
-             }
-        })
-    };
+    const dados = req.body;
+    console.log("Dados recebidos:", dados); // Verifique no console se o 'model_tell' está sendo enviado
+    const sql = "INSERT INTO estoque_peliculas SET ?";
+    conexao.query(sql, [dados], (erro, resultado) => {
+        if (erro) {
+            console.error("Erro ao cadastrar película:", erro);
+            res.status(400).json({ mensagem: "Erro ao cadastrar película" });
+        } else {
+            res.status(201).json({ mensagem: "Película cadastrada com sucesso", id: resultado.insertId });
+        }
+        });
+    }
+
     //metodo para atualizar películas
     //"alterações" sendo passadas no corpo e "id" pelo parametro
     update (req,res) {

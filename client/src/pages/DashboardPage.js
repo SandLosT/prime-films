@@ -4,32 +4,26 @@ import "./DashboardPage.css";
 
 function DashboardPage() {
   return (
-    <>
-      <div className="dashboard-container">
-        {/* Cabeçalho */}
-        <header className="header">
-          <h1>Controle de Estoque</h1>
-        </header>
+    <div className="dashboard-container">
+      <header className="header">
+        <h1>Prime-filmes</h1>
+      </header>
 
-        {/* Conteúdo Principal */}
-        <div className="main-content">
-          <p>Escolha uma das opções abaixo para começar:</p>
-          <div className="manage-buttons">
-            <Link to="/products">
-              <button>Gerenciar Produtos</button>
-            </Link>
-            <Link to="/users">
-              <button className="users">Gerenciar Usuários</button>
-            </Link>
-          </div>
+      <div className="dashboard-box">
+        <h2>Bem-vindo ao Painel de Controle</h2>
+        <p>Gerencie seus dados e ações a partir daqui.</p>
+
+        <div className="manage-buttons">
+          <Link to="/users">
+            <button className="users">Controle Usuários</button>
+          </Link>
+          <Link to="/peliculas">
+            <button className="peliculas">Controle de peliculas</button>
+          </Link>
+          {/* Adicione mais Links para outros botões, conforme necessário */}
         </div>
       </div>
-
-      {/* Rodapé - Fora do Container Principal */}
-      <footer className="footer">
-        <p>&copy; 2024 Controle de Estoque. Todos os direitos reservados.</p>
-      </footer>
-    </>
+    </div>
   );
 }
 

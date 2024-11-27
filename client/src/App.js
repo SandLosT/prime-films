@@ -2,23 +2,33 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
-import ProductsPage from "./pages/ProductsPage";
+import PeliculasPage from "./pages/PeliculasPage";
 import UsersPage from "./pages/UsersPage";
 import AddUserPage from "./pages/AddUserPage";
 import EditUserPage from "./pages/EditUserPage";
-import AddProductPage from "./pages/AddProductPage";
-import EditProductPage from "./pages/EditProductPage";
-import { getProducts, addProduct, updateProduct, deleteProduct, getUsers, addUser, updateUser, deleteUser } from './services/api'; // Importando as funções para carregar os dados
+import AddPeliculaPage from "./pages/AddPeliculaPage";
+import EditPeliculaPage from "./pages/EditPeliculaPage"; // Renomeie este componente corretamente.
+import { 
+  getPeliculas, 
+  addPelicula, 
+  updatePelicula, 
+  deletePelicula, 
+  getUsuarios, 
+  addUsuario, 
+  updateUsuario, 
+  deleteUsuario 
+} from './services/api';
 
 function App() {
-  const [products, setProducts] = useState([]);
+  const [peliculas, setPeliculas] = useState([]); // Renomeado de products para peliculas
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    // Carregar produtos
-    getProducts().then((data) => setProducts(data));
+    // Carregar películas
+    getPeliculas().then((data) => setPeliculas(data));
+
     // Carregar usuários
-    getUsers().then((data) => setUsers(data));
+    getUsuarios().then((data) => setUsers(data));
   }, []);
 
   return (
@@ -26,16 +36,12 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route
-          path="/products"
-          element={<ProductsPage products={products} />}
-        />
+        <Route path="/peliculas" element={<PeliculasPage peliculas={peliculas} />} />
         <Route path="/users" element={<UsersPage users={users} />} />
         <Route path="/add-user" element={<AddUserPage />} />
         <Route path="/edit-user/:id" element={<EditUserPage />} />
-        <Route path="/products" element={<ProductsPage />} />
-        <Route path="/add-product" element={<AddProductPage />} />
-        <Route path="/edit-product/:id" element={<EditProductPage />} />
+        <Route path="/add-pelicula" element={<AddPeliculaPage />} />
+        <Route path="/edit-pelicula/:id" element={<EditPeliculaPage />} />
       </Routes>
     </Router>
   );

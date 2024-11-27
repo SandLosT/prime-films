@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { addUser } from "../services/api";
+import { addUsuario } from "../services/api.js";
 import "./AddUserPage.css";
 
 function AddUserPage() {
-  const [name, setName] = useState("");
+  const [nome, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [senha, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleAddUser = async (e) => {
     e.preventDefault();
-    const user = { name, email, password };
-    await addUser(user);
+    const usuario = { nome, email, senha };
+    await addUsuario(usuario);
     alert("Usuário adicionado com sucesso!");
     navigate("/users");
   };
@@ -24,7 +24,7 @@ function AddUserPage() {
         <input
           type="text"
           placeholder="Nome"
-          value={name}
+          value={nome}
           onChange={(e) => setName(e.target.value)}
         />
         <input
@@ -36,7 +36,7 @@ function AddUserPage() {
         <input
           type="password"
           placeholder="Senha"
-          value={password}
+          value={senha}
           onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit">Salvar</button>

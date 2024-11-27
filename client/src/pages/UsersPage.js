@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getUsers, deleteUser } from "../services/api";
+import { getUsuarios, deleteUsuario } from "../services/api";
 import "./UsersPage.css";
 
 function UsersPage() {
@@ -11,13 +11,13 @@ function UsersPage() {
   }, []);
 
   const fetchUsers = async () => {
-    const data = await getUsers();
+    const data = await getUsuarios();
     setUsers(data);
   };
 
   const handleDelete = async (id) => {
     if (window.confirm("Deseja realmente excluir este usuário?")) {
-      await deleteUser(id);
+      await deleteUsuario(id);
       alert("Usuário excluído com sucesso!");
       fetchUsers();
     }
@@ -39,7 +39,7 @@ function UsersPage() {
           {users.map((user) => (
             <tr key={user.id}>
               <td>{user.id}</td>
-              <td>{user.name}</td>
+              <td>{user.nome}</td>
               <td>{user.email}</td>
               <td>
                 <button onClick={() => handleDelete(user.id)}>Excluir</button>

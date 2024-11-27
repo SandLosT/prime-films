@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getUsers, updateUser } from "../services/api";
+import { getUsuarios, updateUsuario } from "../services/api";
 import "./EditUserPage.css";
 
 function EditUserPage() {
   const { id } = useParams();
-  const [name, setName] = useState("");
+  const [nome, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [senha, setPassword] = useState(""); // Estado para a senha
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,18 +15,29 @@ function EditUserPage() {
   }, []);
 
   const fetchUser = async () => {
-    const users = await getUsers();
+    const users = await getUsuarios();
     const user = users.find((u) => u.id === parseInt(id));
     if (user) {
-      setName(user.name);
+      setName(user.nome);
       setEmail(user.email);
+      // Defina a senha apenas se necessário. Caso contrário, a senha será ignorada.
+      setPassword(""); // Não mostra a senha no input, a não ser que o usuário queira mudar.
     }
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const updatedUser = { name, email };
-    await updateUser(id, updatedUser);
+
+    // Crie um objeto de usuário com todos os dados que precisam ser atualizados
+    const updatedUser = { nome, email };
+    
+    // Se a senha não estiver vazia, inclua a senha no objeto de atualização
+    if (senha) {
+      updatedUser.senha = senha;
+    }
+
+    // Atualize o usuário
+    await updateUsuario(id, updatedUser);
     alert("Usuário atualizado com sucesso!");
     navigate("/users");
   };
@@ -37,7 +49,7 @@ function EditUserPage() {
         <input
           type="text"
           placeholder="Nome"
-          value={name}
+          value={nome}
           onChange={(e) => setName(e.target.value)}
         />
         <input
@@ -45,6 +57,12 @@ function EditUserPage() {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Senha"
+          value={senha}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit">Salvar Alterações</button>
       </form>

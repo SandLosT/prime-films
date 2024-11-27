@@ -1,27 +1,34 @@
+import axios from "axios";
+import { API_BASE_URL } from "../services/api.js";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [senha, setSenha] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
-    // Aqui estamos simulando uma verificação de login com credenciais fixas
-    const validEmail = "teste@teste.com";
-    const validPassword = "senha123";
-
-    if (email === validEmail && password === validPassword) {
-      // Simulando uma resposta de sucesso
-      alert("Login bem-sucedido!");
-      navigate("/dashboard"); // Redireciona para a página principal
-    } else {
-      alert("Erro ao realizar login. Verifique suas credenciais.");
+  
+    try {
+      // Envie os dados para o backend
+      const response = await axios.post(`${API_BASE_URL}/login`, { email, senha });
+  
+      // Simula o recebimento do token (ou status de sucesso)
+      if (response.status === 200) {
+        alert("Login bem-sucedido!");
+        navigate("/dashboard"); // Redireciona para o dashboard
+      } else {
+        alert("Erro ao realizar login. Verifique suas credenciais.");
+      }
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+      alert("Erro ao fazer login. Verifique suas credenciais.");
     }
   };
+  
 
   return (
     <div className="login-container">
@@ -36,8 +43,8 @@ function LoginPage() {
         <input
           type="password"
           placeholder="Senha"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
         />
         <button type="submit">Entrar</button>
       </form>

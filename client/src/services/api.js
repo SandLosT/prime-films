@@ -1,45 +1,71 @@
-// src/services/api.js
 import axios from "axios";
 
-// URL base do back-end
-const API_BASE_URL = "http://localhost:3000"; // Ajuste conforme necessário
+// URL base do backend
+export const API_BASE_URL = "http://localhost:3000"; // Certifique-se de que a porta está correta
 
-// Funções da API de Produtos
-export const getProducts = async () => {
-  const response = await axios.get(`${API_BASE_URL}/products`);
+// Funções da API de Películas
+export const getPeliculas = async () => {
+  const response = await axios.get(`${API_BASE_URL}/peliculas`);
   return response.data;
 };
 
-export const addProduct = async (product) => {
-  const response = await axios.post(`${API_BASE_URL}/products`, product);
+export const addPelicula = async (pelicula) => {
+  try {
+    console.log("Dados enviados:", {
+      model_tell: pelicula.model_tell,
+      model_peli: pelicula.model_peli,
+      quantidade: pelicula.quantidade,
+      valor: pelicula.valor,
+    });
+
+    const response = await axios.post(`${API_BASE_URL}/peliculas`, {
+      model_tell: pelicula.model_tell,
+      model_peli: pelicula.model_peli,
+      quantidade: pelicula.quantidade,
+      valor: pelicula.valor,
+    });
+
+    console.log("Resposta do servidor:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao adicionar película:", error.response || error);
+    throw error; // Lança o erro para ser tratado em outro lugar
+  }
+};
+
+
+
+export const updatePelicula = async (id, pelicula) => {
+  const response = await axios.put(`${API_BASE_URL}/peliculas/${id}`, pelicula);
   return response.data;
 };
 
-export const updateProduct = async (id, product) => {
-  const response = await axios.put(`${API_BASE_URL}/products/${id}`, product);
-  return response.data;
-};
-
-export const deleteProduct = async (id) => {
-  await axios.delete(`${API_BASE_URL}/products/${id}`);
+export const deletePelicula = async (tell) => {
+  await axios.delete(`${API_BASE_URL}/peliculas/${tell}`);
 };
 
 // Funções da API de Usuários
-export const getUsers = async () => {
-  const response = await axios.get(`${API_BASE_URL}/users`);
+export const getUsuarios = async () => {
+  const response = await axios.get(`${API_BASE_URL}/usuarios`);
   return response.data;
 };
 
-export const addUser = async (user) => {
-  const response = await axios.post(`${API_BASE_URL}/users`, user);
+
+export const addUsuario = async (usuario) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/usuarios`, usuario);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao adicionar usuário:", error.response || error);
+    throw error; // Lança o erro para ser tratado em outro lugar
+  }
+};
+
+export const updateUsuario = async (id, usuario) => {
+  const response = await axios.put(`${API_BASE_URL}/usuarios/${id}`, usuario);
   return response.data;
 };
 
-export const updateUser = async (id, user) => {
-  const response = await axios.put(`${API_BASE_URL}/users/${id}`, user);
-  return response.data;
-};
-
-export const deleteUser = async (id) => {
-  await axios.delete(`${API_BASE_URL}/users/${id}`);
+export const deleteUsuario = async (id) => {
+  await axios.delete(`${API_BASE_URL}/usuarios/${id}`);
 };
