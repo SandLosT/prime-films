@@ -28,30 +28,19 @@ class PeliculaController{
     // busca no banco o modelo de telefone que sendo passado por parametro
     // antes era showforname
     showfortell(req, res) {
-        try {
-            const tell = req.params.tell;
-            console.log("Parâmetro recebido:", tell);
-    
-            const sql = "SELECT * FROM estoque_peliculas WHERE TRIM(LOWER(model_tell)) = TRIM(LOWER(?))";
-    
-            conexao.query(sql, tell, (erro, resultado) => {
-                if (erro) {
-                    console.error("Erro na consulta:", erro);
-                    res.status(500).json({ mensagem: "Erro interno do servidor" });
-                } else {
-                    console.log("Resultado da consulta:", resultado);
-                    if (resultado.length === 0) {
-                        res.status(404).json({ mensagem: "tell não encontrado" });
-                    } else {
-                        res.status(200).json(resultado);
-                    }
-                }
-            });
-        } catch (erro) {
-            console.error("Erro inesperado:", erro);
-            res.status(500).json({ mensagem: "Erro inesperado no servidor" });
-        }
-    };
+        const modelTell = req.params.tell;
+        const sql = "SELECT * FROM estoque_peliculas WHERE model_tell = ?";
+        conexao.query(sql, [modelTell], (erro, resultado) => {
+          if (erro) {
+            console.error("Erro ao buscar película:", erro);
+            res.status(500).json({ mensagem: "Erro ao buscar película" });
+          } else if (resultado.length === 0) {
+            res.status(404).json({ mensagem: "Película não encontrada" });
+          } else {
+            res.status(200).json(resultado[0]);
+          }
+        });
+      }
     //fazer busca pelicula
     //Antes era showfrogroup
     showforpelicula(req, res) {

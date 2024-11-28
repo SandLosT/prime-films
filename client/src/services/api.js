@@ -9,6 +9,14 @@ export const getPeliculas = async () => {
   return response.data;
 };
 
+
+export const getPeliculabyid = async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/peliculas/${id}`);
+  return response.data;
+};
+
+
+
 export const addPelicula = async (pelicula) => {
   try {
     console.log("Dados enviados:", {
@@ -35,10 +43,27 @@ export const addPelicula = async (pelicula) => {
 
 
 
-export const updatePelicula = async (id, pelicula) => {
-  const response = await axios.put(`${API_BASE_URL}/peliculas/${id}`, pelicula);
-  return response.data;
+export const updatePelicula = async (id, peliculaData) => {
+  try {
+    const response = await fetch(`/api/peliculas/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(peliculaData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao atualizar película");
+    }
+    
+    return await response.json(); // Retorna a resposta da API
+  } catch (error) {
+    console.error("Erro ao atualizar película:", error);
+    throw error; // Lança o erro para ser tratado no front-end
+  }
 };
+
 
 export const deletePelicula = async (tell) => {
   await axios.delete(`${API_BASE_URL}/peliculas/${tell}`);
@@ -68,4 +93,19 @@ export const updateUsuario = async (id, usuario) => {
 
 export const deleteUsuario = async (id) => {
   await axios.delete(`${API_BASE_URL}/usuarios/${id}`);
+};
+
+export const getPeliculaByTell = async (tell) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/peliculas/tell/${tell}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar película:", error.response || error);
+    throw error; // Lança o erro para ser tratado em outro lugar
+  }
+};
+
+export const getPeliculaByModel = async (pelicula) => {
+  const response = await fetch(`/peliculas/pelicula/${pelicula}`);
+  return response.json();
 };
