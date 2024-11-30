@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getPeliculabyid, updatePelicula } from "../services/api.js"; // Ajuste para buscar pela ID
+import { getPeliculas, updatePelicula } from "../services/api.js"; // Ajuste para buscar pela ID
 import "./EditPeliculaPage.css";
 
 function EditPeliculaPage() {
@@ -17,18 +17,19 @@ function EditPeliculaPage() {
   // UseEffect para carregar os dados da película com base no id
   useEffect(() => {
     fetchPelicula(); // Busca a película com base no id da URL
-  }, [id]);
-
-  // Função para buscar a película pela URL (id)
+  }, []); // O array de dependências vazio garante que o efeito seja executado uma vez, ao montar o componente
+  
   const fetchPelicula = async () => {
-    try {
-      const data = await getPeliculabyid(id); // Agora busca pela ID
-      setPelicula(data); // Preenche os campos do formulário com os dados da película
-    } catch (error) {
-      console.error("Erro ao buscar película:", error);
+    const peliculas = await getPeliculas(); // Carrega todas as películas
+    const pelicula = peliculas.find((p) => p.id === parseInt(id)); // Encontra a película com base no id
+  
+    if (pelicula) {
+      setPelicula(pelicula); // Preenche os campos do formulário com os dados da película
+    } else {
       setError("Erro ao carregar dados da película. Por favor, tente novamente.");
     }
   };
+  
 
   // Função para manipular a mudança nos campos do formulário
   const handleChange = (event) => {
@@ -40,37 +41,23 @@ function EditPeliculaPage() {
   };
 
   // Função para enviar o formulário de edição
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const { model_tell, model_peli, quantidade, valor } = pelicula;
-      const updateData = {
-        model_peli,
-        quantidade,
-        valor
-      };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
   
-      const response = await fetch(`/api/peliculas/${id}`, {
-        method: "PUT", 
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updateData),
-      });
+    // Crie um objeto de película com todos os dados que precisam ser atualizados
+    const updatedPelicula = {
+      model_tell: pelicula.model_tell,  // Acessando as propriedades de 'pelicula'
+      model_peli: pelicula.model_peli,
+      quantidade: pelicula.quantidade,
+      valor: pelicula.valor
+    };
   
-      // Verifique o status da resposta
-      if (!response.ok) {
-        const errorData = await response.json(); // Obtenha o corpo da resposta em caso de erro
-        console.error("Erro na atualização da película:", errorData);
-        throw new Error(errorData.message || "Erro ao atualizar película");
-      }
+    // Envie os dados atualizados para o método updatePelicula
+    await updatePelicula(id, updatedPelicula);
   
-      alert("Película atualizada com sucesso!");
-      navigate("/peliculas");
-    } catch (error) {
-      console.error("Erro ao atualizar película:", error);
-      alert(`Erro: ${error.message}`);
-    }
+    // Exiba uma mensagem de sucesso e navegue para a página de películas
+    alert("Película atualizada com sucesso!");
+    navigate("/peliculas");
   };
   
 
@@ -80,6 +67,7 @@ function EditPeliculaPage() {
       {error && <div className="error-message">{error}</div>}
 
       <form onSubmit={handleSubmit}>
+
         <div className="form-group">
           <label htmlFor="model_tell">Modelo de Telefone</label>
           <input
@@ -88,7 +76,7 @@ function EditPeliculaPage() {
             name="model_tell"
             value={pelicula.model_tell} // Campo preenchido com os dados
             onChange={handleChange}
-            disabled
+            
           />
         </div>
 

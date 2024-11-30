@@ -45,7 +45,7 @@ export const addPelicula = async (pelicula) => {
 
 export const updatePelicula = async (id, peliculaData) => {
   try {
-    const response = await fetch(`/api/peliculas/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/peliculas/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

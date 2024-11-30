@@ -8,19 +8,18 @@ function DashboardPage() {
       <header className="header">
         <h1>Prime-filmes</h1>
       </header>
-
-      <div className="dashboard-box">
-        <h2>Bem-vindo ao Painel de Controle</h2>
-        <p>Gerencie seus dados e ações a partir daqui.</p>
-
-        <div className="manage-buttons">
-          <Link to="/users">
-            <button className="users">Controle Usuários</button>
-          </Link>
-          <Link to="/peliculas">
-            <button className="peliculas">Controle de peliculas</button>
-          </Link>
-          {/* Adicione mais Links para outros botões, conforme necessário */}
+      <div className="content-container">
+        <h2 className="big-text">Bem-vindo ao Painel de Controle</h2>
+        <div className="dashboard-box">
+          <div className="manage-buttons">
+            <Link to="/users">
+              <button className="users">Controle Usuários</button>
+            </Link>
+            <Link to="/peliculas">
+              <button className="peliculas">Controle de peliculas</button>
+            </Link>
+            {/* Adicione mais Links para outros botões, conforme necessário */}
+          </div>
         </div>
       </div>
     </div>
